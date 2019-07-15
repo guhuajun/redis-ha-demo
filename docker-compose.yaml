@@ -1,0 +1,78 @@
+version: "3"
+
+services:
+  master:
+    image: redis:alpine
+    container_name: redis-master
+    command: redis-server --requirepass 123456
+    ports:
+      - "6379:6379"
+    networks:
+      - redis-ha
+  slave1:
+    image: redis:alpine
+    container_name: redis-slave-1
+    ports:
+      - "6380:6379"
+    command: redis-server --slaveof redis-master 6379 --requirepass 123456 --masterauth 123456
+    depends_on:
+      - master
+    networks:
+      - redis-ha
+  slave2:
+    image: redis:alpine
+    container_name: redis-slave-2
+    ports:
+      - "6381:6379"
+    command: redis-server --slaveof redis-master 6379 --requirepass 123456 --masterauth 123456
+    depends_on:
+      - master
+    networks:
+      - redis-ha
+  sentinel1:
+    image: redis:alpine
+    container_name: redis-sentinel-1
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+    - "./sentinel/sentinel1.conf:/usr/local/etc/redis/sentinel.conf"
+    networks:
+      - redis-ha
+  sentinel2:
+    image: redis:alpine
+    container_name: redis-sentinel-2
+    # ports:
+    # - "26380:26379"           
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+    - "./sentinel/sentinel2.conf:/usr/local/etc/redis/sentinel.conf"
+    networks:
+      - redis-ha
+  sentinel3:
+    image: redis:alpine
+    container_name: redis-sentinel-3
+    # ports:
+    # - "26381:26379"           
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+    - "./sentinel/sentinel3.conf:/usr/local/etc/redis/sentinel.conf"
+    networks:
+      - redis-ha
+  monitor:
+    image: vieux/redmon:latest
+    container_name: redmon
+    ports:
+    - "4567:4567"     
+    # command: redmon -r http://localhost:9736/sentinel/redis-sentinel-1:26379,redis-sentinel-2:26379,,redis-sentinel-3:26379/master
+    command: redmon -r redis://:123456@redis-master:6379
+    networks:
+      - redis-ha
+  benchmark:
+    image: redislabs/memtier_benchmark:1.2.17
+    container_name: benchmark
+    # command: memtier_benchmark -s redis-sentinel-1:6379,redis-sentinel-2:6379,redis-sentinel-3:6379
+    command: memtier_benchmark -s redis-master -a 123456
+    networks:
+      - redis-ha    
+
+networks:
+  redis-ha:
