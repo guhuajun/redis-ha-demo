@@ -25,8 +25,8 @@ if __name__ == "__main__":
     while True:
         try:
             sentinel = Sentinel(sentinels, socket_timeout=0.1)
-            logging.debug(str(sentinel.discover_master('mymaster')))
-            logging.debug(str(sentinel.discover_slaves('mymaster')))
+            logging.debug('Cluster Master: %s', str(sentinel.discover_master('mymaster')))
+            logging.debug('Cluster Slave: %s', str(sentinel.discover_slaves('mymaster')))
 
             master = sentinel.master_for('mymaster', socket_timeout=0.1, password='123456')
             slave = sentinel.slave_for('mymaster', socket_timeout=0.1, password='123456')
