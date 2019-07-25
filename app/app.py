@@ -24,12 +24,12 @@ if __name__ == "__main__":
 
     while True:
         try:
-            sentinel = Sentinel(sentinels, socket_timeout=1)
+            sentinel = Sentinel(sentinels, socket_timeout=0.1)
             logging.debug(str(sentinel.discover_master('mymaster')))
             logging.debug(str(sentinel.discover_slaves('mymaster')))
 
-            master = sentinel.master_for('mymaster', socket_timeout=1, password='123456')
-            slave = sentinel.slave_for('mymaster', socket_timeout=1, password='123456')
+            master = sentinel.master_for('mymaster', socket_timeout=0.1, password='123456')
+            slave = sentinel.slave_for('mymaster', socket_timeout=0.1, password='123456')
 
             master.set('timestamp', datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
             logging.debug('Reading key - timestamp: %s', slave.get('timestamp'))
