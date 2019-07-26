@@ -77,7 +77,7 @@ Using following command to pause a redis-sentinel-1.
 docker pause redis-sentinel-1
 ```
 
-From the log, you will get following log entries that indicates redis-sentinel-1 is down. But the whole cluster is still working properly.
+From the log, you will get following log entries that indicate redis-sentinel-1 is down. But the whole cluster is still working properly.
 ```bash
 demoapp      | [2019-07-26 02:39:54.992][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 02:39:54'
 redis-sentinel-2 | 1:X 26 Jul 02:39:55.598 # +sdown sentinel 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63 172.23.0.6 26379 @ mymaster 172.23.0.3 6379
@@ -92,7 +92,7 @@ Keep on pausing redis-sentinel-2
 docker pause redis-sentinel-2
 ```
 
-From the log, you will get following log entries that indicates redis-sentinel-2 is down. But the whole cluster is still working properly.
+From the log, you will get following log entries that indicate redis-sentinel-2 is down. But the whole cluster is still working properly.
 ```bash
 redis-sentinel-3 | 1:X 26 Jul 02:42:31.888 # +sdown sentinel 5389774d80d4ae4b85b1b1a92bc56660d1bbe89d 172.23.0.7 26379 @ mymaster 172.23.0.3 6379
 demoapp      | [2019-07-26 02:42:32.167][app.py:30][DEBUG]Cluster Master: ('172.23.0.3', 6379)
@@ -105,7 +105,7 @@ Keep on pausing redis-sentinel-3
 docker pause redis-sentinel-3
 ```
 
-From the log, you will get following log entries that indicates the cluster is unhealthy.
+From the log, you will get following log entries that indicate the cluster is unhealthy.
 ```bash
 demoapp      | [2019-07-26 02:43:37.718][app.py:39][ERROR]No master found for 'mymaster'
 demoapp      | [2019-07-26 02:43:39.023][app.py:39][ERROR]No master found for 'mymaster'
