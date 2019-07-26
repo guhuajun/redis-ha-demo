@@ -49,7 +49,7 @@ services:
     container_name: redis-sentinel-1
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     volumes:
-    - "./sentinel/sentinel1.conf:/usr/local/etc/redis/sentinel.conf"
+      - "./sentinel/sentinel1.conf:/usr/local/etc/redis/sentinel.conf"
     networks:
       redis-ha:
         ipv4_address: 172.23.0.6
@@ -66,7 +66,7 @@ services:
     # - "26380:26379"
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     volumes:
-    - "./sentinel/sentinel2.conf:/usr/local/etc/redis/sentinel.conf"
+      - "./sentinel/sentinel2.conf:/usr/local/etc/redis/sentinel.conf"
     networks:
       redis-ha:
         ipv4_address: 172.23.0.7
@@ -81,7 +81,7 @@ services:
     # - "26381:26379"
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     volumes:
-    - "./sentinel/sentinel3.conf:/usr/local/etc/redis/sentinel.conf"
+      - "./sentinel/sentinel3.conf:/usr/local/etc/redis/sentinel.conf"
     networks:
       redis-ha:
         ipv4_address: 172.23.0.8
@@ -90,26 +90,38 @@ services:
     depends_on: 
       - sentinel2
   monitor:
-    image: vieux/redmon:latest
+    image: transcranial/redmon:latest
     container_name: redmon
     ports:
     - "4567:4567"
-    command: redmon -r http://localhost:9736/sentinel/redis-sentinel-1:26379,redis-sentinel-2:26379,redis-sentinel-3:26379/master
-    # command: redmon -r redis://:123456@redis-master,redis-slave-1:6379
+    command: redmon -r redis://:123456@redis-master:6379
     networks:
       redis-ha:
+        ipv4_address: 172.23.0.9
         aliases: 
           - redmon
+  # redislive:
+    # image: snakeliwei/redislive:latest
+    # container_name: redislive
+    # ports:
+    # - "8888:8888"
+    # command: ./redis-monitor.py --duration=3600 --quite
+    # volumes: 
+    #   - "./redislive/redis-live.conf:/redislive/src/redis-live.conf"
+    # networks:
+    #   redis-ha:
+    #     aliases: 
+    #       - redislive
   app:
-    image: gregg/redisapp:0.1
+    image: redisha/demoapp:0.1
     build:
       context: ./app/
       dockerfile: Dockerfile
-    container_name: redisapp
+    container_name: demoapp
     networks:
       redis-ha:
         aliases: 
-          - redisapp
+          - demoapp
     depends_on: 
       - master
       - slave1
@@ -120,7 +132,6 @@ services:
   # benchmark:
   #   image: redislabs/memtier_benchmark:1.2.17
   #   container_name: benchmark
-  #   # command: memtier_benchmark -s redis-sentinel-1:6379,redis-sentinel-2:6379,redis-sentinel-3:6379
   #   command: memtier_benchmark -s redis-master -a 123456 --test-time 3600
   #   networks:
   #     - redis-ha
