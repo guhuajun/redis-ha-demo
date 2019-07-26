@@ -27,6 +27,32 @@ Clients are called C1, C2, C3, ..., Cn.
 
     Configuration: quorum = 2
 
+## Initial configurations
+
+### Master and slave nodes
+
+Master and slave nodes are started with following parameters.
+
+```bash
+redis-server --requirepass 123456 --masterauth 123456
+redis-server --slaveof redis-master 6379 --requirepass 123456 --masterauth 123456
+```
+
+### Sentinel
+
+Sentinels are started with following initial configurations.
+**Note: Configurations will be changed when master node failover is triggered.**
+
+```conf
+port 26379
+dir "/tmp"
+sentinel myid 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63
+sentinel monitor mymaster 172.23.0.3 6379 2
+sentinel down-after-milliseconds mymaster 5000
+sentinel failover-timeout mymaster 5000
+sentinel auth-pass mymaster 123456
+```
+
 ## Verification Steps
 
 ### General Setups
@@ -141,7 +167,7 @@ demoapp      | [2019-07-26 02:49:39.234][app.py:37][DEBUG]Reading key(timestamp)
 
 ### Slaves
 
-Before doing following steps, please make sure that you have a healthy cluster.
+**Note: Before executing following steps, please make sure that you have a healthy cluster.**
 
 Using following command to pause redis-slave-1.
 ```bash
@@ -245,6 +271,19 @@ demoapp      | [2019-07-26 03:10:36.487][app.py:31][DEBUG]Cluster Slave: [('172.
 ```
 
 ### Master
+
+**Note: Before executing following steps, please make sure that you have a healthy cluster.**
+
+Using following command to pause redis-master.
+```bash
+docker pause redis-master
+```
+
+After pausing the master node, a failover will be triggered.
+```bash
+
+```
+
 
 ## References
 https://redis.io/topics/sentinel
