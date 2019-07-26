@@ -100,18 +100,6 @@ services:
         ipv4_address: 172.23.0.9
         aliases: 
           - redmon
-  # redislive:
-    # image: snakeliwei/redislive:latest
-    # container_name: redislive
-    # ports:
-    # - "8888:8888"
-    # command: ./redis-monitor.py --duration=3600 --quite
-    # volumes: 
-    #   - "./redislive/redis-live.conf:/redislive/src/redis-live.conf"
-    # networks:
-    #   redis-ha:
-    #     aliases: 
-    #       - redislive
   app:
     image: redisha/demoapp:0.1
     build:
