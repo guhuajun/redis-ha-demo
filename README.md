@@ -281,9 +281,207 @@ docker pause redis-master
 
 After pausing the master node, a failover will be triggered.
 ```bash
+demoapp      | [2019-07-26 06:40:35.432][app.py:30][DEBUG]Cluster Master: ('172.23.0.3', 6379)
+demoapp      | [2019-07-26 06:40:35.433][app.py:31][DEBUG]Cluster Slave: [('172.23.0.5', 6379), ('172.23.0.4', 6379)]
+demoapp      | [2019-07-26 06:40:35.437][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:40:35'
+redis-sentinel-1 | 1:X 26 Jul 2019 06:40:35.526 * +fix-slave-config slave 172.23.0.5:6379 172.23.0.5 6379 @ mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:40:35.526 * +fix-slave-config slave 172.23.0.4:6379 172.23.0.4 6379 @ mymaster 172.23.0.3 6379
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.527 # Connection with master lost.
+redis-master | 1:M 26 Jul 2019 06:40:35.527 # Connection with replica 172.23.0.5:6379 lost.
+redis-master | 1:M 26 Jul 2019 06:40:35.527 # Connection with replica 172.23.0.4:6379 lost.
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.527 * Caching the disconnected master state.
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.527 * REPLICAOF 172.23.0.3:6379 enabled (user request from 'id=4 addr=172.23.0.6:60264 fd=9 name=sentinel-9a8f27c0-cmd age=10 idle=0 flags=x db=0 sub=0 psub=0 multi=3 qbuf=150 qbuf-free=32618 obl=36 oll=0 omem=0 events=r cmd=exec')
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.526 # Connection with master lost.
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.526 * Caching the disconnected master state.
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.527 * REPLICAOF 172.23.0.3:6379 enabled (user request from 'id=4 addr=172.23.0.6:40210 fd=9 name=sentinel-9a8f27c0-cmd age=10 idle=0 flags=x db=0 sub=0 psub=0 multi=3 qbuf=150 qbuf-free=32618 obl=36 oll=0 omem=0 events=r cmd=exec')
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.827 * Connecting to MASTER 172.23.0.3:6379
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.827 * MASTER <-> REPLICA sync started
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.827 * Non blocking connect for SYNC fired the event.
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.827 * Master replied to PING, replication can continue...
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.827 * Trying a partial resynchronization (request c465dda6926dad2c57e23289b0cec185a83c7d81:5604).
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.828 * Successful partial resynchronization with master.
+redis-slave-2 | 1:S 26 Jul 2019 06:40:35.828 * MASTER <-> REPLICA sync: Master accepted a Partial Resynchronization.
+redis-master | 1:M 26 Jul 2019 06:40:35.828 * Replica 172.23.0.5:6379 asks for synchronization
+redis-master | 1:M 26 Jul 2019 06:40:35.828 * Partial resynchronization request from 172.23.0.5:6379 accepted. Sending 135 bytes of backlog starting from offset 5604.
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.833 * Connecting to MASTER 172.23.0.3:6379
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.833 * MASTER <-> REPLICA sync started
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.833 * Non blocking connect for SYNC fired the event.
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.834 * Master replied to PING, replication can continue...
+redis-master | 1:M 26 Jul 2019 06:40:35.834 * Replica 172.23.0.4:6379 asks for synchronization
+redis-master | 1:M 26 Jul 2019 06:40:35.834 * Partial resynchronization request from 172.23.0.4:6379 accepted. Sending 135 bytes of backlog starting from offset 5604.
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.834 * Trying a partial resynchronization (request c465dda6926dad2c57e23289b0cec185a83c7d81:5604).
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.834 * Successful partial resynchronization with master.
+redis-slave-1 | 1:S 26 Jul 2019 06:40:35.834 * MASTER <-> REPLICA sync: Master accepted a Partial Resynchronization.
+demoapp      | [2019-07-26 06:40:36.439][app.py:30][DEBUG]Cluster Master: ('172.23.0.3', 6379)
+demoapp      | [2019-07-26 06:40:36.441][app.py:31][DEBUG]Cluster Slave: [('172.23.0.5', 6379), ('172.23.0.4', 6379)]
+demoapp      | [2019-07-26 06:40:36.446][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:40:36'
+demoapp      | [2019-07-26 06:41:08.007][app.py:30][DEBUG]Cluster Master: ('172.23.0.3', 6379)
+demoapp      | [2019-07-26 06:41:08.008][app.py:31][DEBUG]Cluster Slave: [('172.23.0.5', 6379), ('172.23.0.4', 6379)]
+demoapp      | [2019-07-26 06:41:08.111][app.py:39][ERROR]Timeout reading from socket
+demoapp      | [2019-07-26 06:41:09.116][app.py:30][DEBUG]Cluster Master: ('172.23.0.3', 6379)
+demoapp      | [2019-07-26 06:41:09.117][app.py:31][DEBUG]Cluster Slave: [('172.23.0.5', 6379), ('172.23.0.4', 6379)]
+demoapp      | [2019-07-26 06:41:09.219][app.py:39][ERROR]Timeout reading from socket
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:09.591 # +sdown master mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.020 # +sdown master mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.104 # +odown master mymaster 172.23.0.3 6379 #quorum 2/2
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.104 # +new-epoch 1
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.104 # +try-failover master mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.113 # +vote-for-leader 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63 1
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:10.116 # +new-epoch 1
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:10.118 # +new-epoch 1
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:10.120 # +vote-for-leader 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63 1
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.121 # 120978a92740fcdef29b0361df53a3aff0f0824b voted for 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63 1
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:10.122 # +vote-for-leader 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63 1
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.122 # 5389774d80d4ae4b85b1b1a92bc56660d1bbe89d voted for 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63 1
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.167 # +elected-leader master mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.167 # +failover-state-select-slave master mymaster 172.23.0.3 6379
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:10.191 # +sdown master mymaster 172.23.0.3 6379
+demoapp      | [2019-07-26 06:41:10.227][app.py:39][ERROR]No master found for 'mymaster'
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.250 # +selected-slave slave 172.23.0.5:6379 172.23.0.5 6379 @ mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.251 * +failover-state-send-slaveof-noone slave 172.23.0.5:6379 172.23.0.5 6379 @ mymaster 172.23.0.3 6379
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:10.268 # +odown master mymaster 172.23.0.3 6379 #quorum 3/2
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:10.268 # Next failover delay: I will not start a failover before Fri Jul 26 06:41:20 2019
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:10.327 * +failover-state-wait-promotion slave 172.23.0.5:6379 172.23.0.5 6379 @ mymaster 172.23.0.3 6379
+redis-slave-2 | 1:M 26 Jul 2019 06:41:10.328 # Setting secondary replication ID to c465dda6926dad2c57e23289b0cec185a83c7d81, valid up to offset: 24375. New replication ID is 3dba1fcea0cab761dc959243ea26399cc93811fd
+redis-slave-2 | 1:M 26 Jul 2019 06:41:10.328 # Connection with master lost.
+redis-slave-2 | 1:M 26 Jul 2019 06:41:10.328 * Caching the disconnected master state.
+redis-slave-2 | 1:M 26 Jul 2019 06:41:10.328 * Discarding previously cached master state.
+redis-slave-2 | 1:M 26 Jul 2019 06:41:10.328 * MASTER MODE enabled (user request from 'id=4 addr=172.23.0.6:40210 fd=9 name=sentinel-9a8f27c0-cmd age=45 idle=0 flags=x db=0 sub=0 psub=0 multi=3 qbuf=140 qbuf-free=32628 obl=36 oll=0 omem=0 events=r cmd=exec')
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:10.720 # +odown master mymaster 172.23.0.3 6379 #quorum 3/2
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:10.720 # Next failover delay: I will not start a failover before Fri Jul 26 06:41:20 2019
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:11.136 # +promoted-slave slave 172.23.0.5:6379 172.23.0.5 6379 @ mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:11.136 # +failover-state-reconf-slaves master mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:11.202 * +slave-reconf-sent slave 172.23.0.4:6379 172.23.0.4 6379 @ mymaster 172.23.0.3 6379
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:11.202 # +config-update-from sentinel 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63 172.23.0.6 26379 @ mymaster 172.23.0.3 6379
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:11.202 # +switch-master mymaster 172.23.0.3 6379 172.23.0.5 6379
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:11.202 * +slave slave 172.23.0.4:6379 172.23.0.4 6379 @ mymaster 172.23.0.5 6379
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:11.202 * +slave slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:11.203 # +config-update-from sentinel 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63 172.23.0.6 26379 @ mymaster 172.23.0.3 6379
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:11.203 # +switch-master mymaster 172.23.0.3 6379 172.23.0.5 6379
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:11.203 * +slave slave 172.23.0.4:6379 172.23.0.4 6379 @ mymaster 172.23.0.5 6379
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:11.203 * +slave slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.203 # Connection with master lost.
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.203 * Caching the disconnected master state.
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.203 * REPLICAOF 172.23.0.5:6379 enabled (user request from 'id=4 addr=172.23.0.6:60264 fd=9 name=sentinel-9a8f27c0-cmd age=46 idle=0 flags=x db=0 sub=0 psub=0 multi=3 qbuf=299 qbuf-free=32469 obl=36 oll=0 omem=0 events=r cmd=exec')
+demoapp      | [2019-07-26 06:41:11.231][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:11.232][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:11.341][app.py:39][ERROR]Timeout reading from socket
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.565 * Connecting to MASTER 172.23.0.5:6379
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.565 * MASTER <-> REPLICA sync started
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.565 * Non blocking connect for SYNC fired the event.
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.565 * Master replied to PING, replication can continue...
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.566 * Trying a partial resynchronization (request c465dda6926dad2c57e23289b0cec185a83c7d81:24375).
+redis-slave-2 | 1:M 26 Jul 2019 06:41:11.566 * Replica 172.23.0.4:6379 asks for synchronization
+redis-slave-2 | 1:M 26 Jul 2019 06:41:11.566 * Partial resynchronization request from 172.23.0.4:6379 accepted. Sending 617 bytes of backlog starting from offset 24375.
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.566 * Successful partial resynchronization with master.
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.566 # Master replication ID changed to 3dba1fcea0cab761dc959243ea26399cc93811fd
+redis-slave-1 | 1:S 26 Jul 2019 06:41:11.566 * MASTER <-> REPLICA sync: Master accepted a Partial Resynchronization.
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:12.198 # -odown master mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:12.198 * +slave-reconf-inprog slave 172.23.0.4:6379 172.23.0.4 6379 @ mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:12.198 * +slave-reconf-done slave 172.23.0.4:6379 172.23.0.4 6379 @ mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:12.251 # +failover-end master mymaster 172.23.0.3 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:12.251 # +switch-master mymaster 172.23.0.3 6379 172.23.0.5 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:12.251 * +slave slave 172.23.0.4:6379 172.23.0.4 6379 @ mymaster 172.23.0.5 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:12.251 * +slave slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+demoapp      | [2019-07-26 06:41:12.347][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:12.348][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:12.355][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:12'
+demoapp      | [2019-07-26 06:41:13.358][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:13.359][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:13.362][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:13'
+demoapp      | [2019-07-26 06:41:14.365][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:14.366][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:14.369][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:14'
+demoapp      | [2019-07-26 06:41:15.376][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:15.377][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:15.481][app.py:39][ERROR]Timeout reading from socket
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:16.214 # +sdown slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:16.222 # +sdown slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+demoapp      | [2019-07-26 06:41:16.485][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:16.487][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:16.490][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:16'
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:17.287 # +sdown slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+demoapp      | [2019-07-26 06:41:17.492][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:17.494][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379)]
+demoapp      | [2019-07-26 06:41:17.497][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:17'
 
 ```
 
+Using following command to unpause redis-master. redis-master (172.23.0.3) is a part of slave nodes now.
+```bash
+demoapp      | [2019-07-26 06:41:45.733][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:45.734][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379)]
+demoapp      | [2019-07-26 06:41:45.738][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:45'
+redis-master | 1:M 26 Jul 2019 06:41:45.786 # Connection with replica client id #19 lost.
+redis-master | 1:M 26 Jul 2019 06:41:45.786 # Connection with replica client id #18 lost.
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:45.824 # -sdown slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+redis-sentinel-3 | 1:X 26 Jul 2019 06:41:45.827 # -sdown slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+redis-sentinel-1 | 1:X 26 Jul 2019 06:41:45.842 # -sdown slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+demoapp      | [2019-07-26 06:41:46.742][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:46.743][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:46.746][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:03'
+demoapp      | [2019-07-26 06:41:47.748][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:47.750][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:47.753][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:03'
+demoapp      | [2019-07-26 06:41:48.755][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:48.756][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:48.759][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:03'
+demoapp      | [2019-07-26 06:41:49.763][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:49.764][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:49.767][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:03'
+demoapp      | [2019-07-26 06:41:50.769][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:50.770][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:50.773][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:50'
+demoapp      | [2019-07-26 06:41:51.777][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:51.778][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:51.782][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:51'
+demoapp      | [2019-07-26 06:41:52.803][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:52.804][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:52.807][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:52'
+demoapp      | [2019-07-26 06:41:53.810][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:53.811][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:53.815][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:03'
+demoapp      | [2019-07-26 06:41:54.818][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:54.819][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:54.822][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:54'
+demoapp      | [2019-07-26 06:41:55.825][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:55.826][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:55.829][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:03'
+redis-sentinel-2 | 1:X 26 Jul 2019 06:41:55.859 * +convert-to-slave slave 172.23.0.3:6379 172.23.0.3 6379 @ mymaster 172.23.0.5 6379
+redis-master | 1:S 26 Jul 2019 06:41:55.859 * Before turning into a replica, using my master parameters to synthesize a cached master: I may be able to synchronize with the new master with just a partial transfer.
+redis-master | 1:S 26 Jul 2019 06:41:55.859 * REPLICAOF 172.23.0.5:6379 enabled (user request from 'id=79 addr=172.23.0.7:38962 fd=47 name=sentinel-5389774d-cmd age=10 idle=0 flags=x db=0 sub=0 psub=0 multi=3 qbuf=150 qbuf-free=32618 obl=36 oll=0 omem=0 events=r cmd=exec')
+redis-master | 1:S 26 Jul 2019 06:41:56.573 * Connecting to MASTER 172.23.0.5:6379
+redis-master | 1:S 26 Jul 2019 06:41:56.573 * MASTER <-> REPLICA sync started
+redis-master | 1:S 26 Jul 2019 06:41:56.573 * Non blocking connect for SYNC fired the event.
+redis-master | 1:S 26 Jul 2019 06:41:56.573 * Master replied to PING, replication can continue...
+redis-slave-2 | 1:M 26 Jul 2019 06:41:56.573 * Replica 172.23.0.3:6379 asks for synchronization
+redis-slave-2 | 1:M 26 Jul 2019 06:41:56.574 * Partial resynchronization not accepted: Requested offset for second ID was 105537, but I can reply up to 24375
+redis-slave-2 | 1:M 26 Jul 2019 06:41:56.574 * Starting BGSAVE for SYNC with target: disk
+redis-slave-2 | 1:M 26 Jul 2019 06:41:56.574 * Background saving started by pid 29
+redis-master | 1:S 26 Jul 2019 06:41:56.573 * Trying a partial resynchronization (request c465dda6926dad2c57e23289b0cec185a83c7d81:105537).
+redis-master | 1:S 26 Jul 2019 06:41:56.574 * Full resync from master: 3dba1fcea0cab761dc959243ea26399cc93811fd:36347
+redis-master | 1:S 26 Jul 2019 06:41:56.574 * Discarding previously cached master state.
+redis-slave-2 | 29:C 26 Jul 2019 06:41:56.580 * DB saved on disk
+redis-slave-2 | 29:C 26 Jul 2019 06:41:56.580 * RDB: 0 MB of memory used by copy-on-write
+redis-master | 1:S 26 Jul 2019 06:41:56.676 * MASTER <-> REPLICA sync: receiving 8757 bytes from master
+redis-slave-2 | 1:M 26 Jul 2019 06:41:56.676 * Background saving terminated with success
+redis-slave-2 | 1:M 26 Jul 2019 06:41:56.676 * Synchronization with replica 172.23.0.3:6379 succeeded
+redis-master | 1:S 26 Jul 2019 06:41:56.677 * MASTER <-> REPLICA sync: Flushing old data
+redis-master | 1:S 26 Jul 2019 06:41:56.677 * MASTER <-> REPLICA sync: Loading DB in memory
+redis-master | 1:S 26 Jul 2019 06:41:56.677 * MASTER <-> REPLICA sync: Finished with success
+demoapp      | [2019-07-26 06:41:56.832][app.py:30][DEBUG]Cluster Master: ('172.23.0.5', 6379)
+demoapp      | [2019-07-26 06:41:56.833][app.py:31][DEBUG]Cluster Slave: [('172.23.0.4', 6379), ('172.23.0.3', 6379)]
+demoapp      | [2019-07-26 06:41:56.836][app.py:37][DEBUG]Reading key(timestamp): b'2019-07-26 06:41:56'
+```
+
+## Cleanup
+
+Using following command to stop and clean containers.
+```bash
+docker-compose down
+```
+
+**Note: Please restore sentinel configuration to default after running the above command.**
 
 ## References
 https://redis.io/topics/sentinel
