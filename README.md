@@ -34,8 +34,8 @@ Clients are called C1, C2, C3, ..., Cn.
 Master and slave nodes are started with following parameters.
 
 ```bash
-redis-server --requirepass 123456 --masterauth 123456
-redis-server --slaveof redis-master 6379 --requirepass 123456 --masterauth 123456
+redis-server --requirepass <password> --masterauth <password>
+redis-server --slaveof redis-master 6379 --requirepass <password> --masterauth <password>
 ```
 
 ### Sentinel
@@ -50,7 +50,7 @@ sentinel myid 9a8f27c0b49b38cdd4df0e6b1a8698ec4e5dfc63
 sentinel monitor mymaster 172.23.0.3 6379 2
 sentinel down-after-milliseconds mymaster 5000
 sentinel failover-timeout mymaster 5000
-sentinel auth-pass mymaster 123456
+sentinel auth-pass mymaster <password>
 ```
 
 ## Verification Steps
