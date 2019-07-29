@@ -4,10 +4,10 @@ A project for demostrating a redis master-slave cluster with sentinels.
 
 ## Topology
 
-Masters are called M1, M2, M3, ..., Mn.
-Slaves are called R1, R2, R3, ..., Rn (R stands for replica).
-Sentinels are called S1, S2, S3, ..., Sn.
-Clients are called C1, C2, C3, ..., Cn.
+Masters are called M1, M2, M3, ..., Mn.  
+Slaves are called R1, R2, R3, ..., Rn (R stands for replica).  
+Sentinels are called S1, S2, S3, ..., Sn.  
+Clients are called C1, C2, C3, ..., Cn.  
 
     +----+    +----+    +----+
     | M1 |----| R1 |----| R2 |
@@ -24,8 +24,6 @@ Clients are called C1, C2, C3, ..., Cn.
     +----+       +----+
     | C1 |       | C2 |
     +----+       +----+
-
-    Configuration: quorum = 2
 
 ## Initial configurations
 
